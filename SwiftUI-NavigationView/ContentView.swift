@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let homeScreen = Screen(scnLinearGradientColorStart: .blue, scnLinearGradientColorEnd: .red, scnLinearGradientStartPoint: .topLeading, scnLinearGradientEndPoint: .bottomTrailing, scnImageName: "Home", scnImageWidth: 208, scnImageHeight: 208, scnImageAlignment: .center, scnTextName: "Home", scnTextSize: 32, scnBtnText: "Notifications", scnBtnBackgroundColor: .blue, scnBtnFontColor: .white, scnNavLinkDest: SecondScreen())
     var body: some View {
         NavigationView {
-            HomeScreen()
+            homeScreen.navigationBarTitle("Home")
         }
     }
 }
@@ -39,6 +41,54 @@ struct SecondScreen: View {
                     }
                 )
             }.navigationTitle("Notifications")
+        }
+    }
+}
+
+struct Screen: View {
+    
+    var scnLinearGradientColorStart: Color
+    var scnLinearGradientColorEnd: Color
+    var scnLinearGradientStartPoint: UnitPoint
+    var scnLinearGradientEndPoint: UnitPoint
+    
+    var scnImageName: String
+    var scnImageWidth: CGFloat
+    var scnImageHeight: CGFloat
+    var scnImageAlignment: Alignment
+    
+    var scnTextName: String
+    var scnTextSize: CGFloat
+    
+    var scnBtnText: String
+    var scnBtnBackgroundColor: Color
+    var scnBtnFontColor: Color
+    
+    var scnNavLinkDest: any View
+    
+    var body: some View {
+        ZStack {
+            LinearGradient(colors: [scnLinearGradientColorStart, scnLinearGradientColorEnd], startPoint: scnLinearGradientStartPoint, endPoint: scnLinearGradientEndPoint)
+                .ignoresSafeArea(.all)
+            VStack{
+                Image(systemName: scnImageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: scnImageWidth,
+                           height: scnImageHeight,
+                           alignment: scnImageAlignment)
+                    .padding()
+                
+                Text(scnTextName)
+                    .font(.system(size: scnTextSize, weight: .light, design: .default))
+                
+                NavigationLink(
+                    destination: AnyView(scnNavLinkDest),
+                    label: {
+                        ContinueButton(btnText: scnBtnText, btnBackgroundColor: scnBtnBackgroundColor, btnFontColor: scnBtnFontColor)
+                    }
+                )
+            }
         }
     }
 }
